@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { EventCard } from '../components/events/EventCard';
 import { useFavoritesStore } from '../store/favoritesStore';
@@ -10,6 +10,15 @@ export const FavoritesScreen: React.FC = () => {
   useEffect(() => {
     loadFavorites();
   }, [loadFavorites]);
+
+  // Sort favorites by date: most recent (earliest date) at the top
+  const sortedFavorites = useMemo(() => {
+    return [...favorites].sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateA - dateB;
+    });
+  }, [favorites]);
 
   return (
     <View style={styles.container}>
@@ -27,8 +36,8 @@ export const FavoritesScreen: React.FC = () => {
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateText}>Loading favorites...</Text>
           </View>
-        ) : favorites.length > 0 ? (
-          favorites.map(event => (
+        ) : sortedFavorites.length > 0 ? (
+          sortedFavorites.map(event => (
             <EventCard key={event.id} event={event} />
           ))
         ) : (

@@ -15,12 +15,19 @@ import { colors } from '../theme/colors';
 export const EventsScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showLocationPicker, setShowLocationPicker] = useState(false);
+  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
 
   const uniqueLocations = useMemo(() => {
     const locations = Array.from(new Set(mockEvents.map(event => event.location)));
     return locations.sort();
+  }, []);
+
+  const uniqueCategories = useMemo(() => {
+    const categories = Array.from(new Set(mockEvents.map(event => event.category)));
+    return categories.sort();
   }, []);
 
   const filteredEvents = useMemo(() => {
@@ -34,8 +41,17 @@ export const EventsScreen: React.FC = () => {
       filtered = filtered.filter(event => event.location === selectedLocation);
     }
 
-    return filtered;
-  }, [selectedDate, selectedLocation]);
+    if (selectedCategory) {
+      filtered = filtered.filter(event => event.category === selectedCategory);
+    }
+
+    // Sort by date: most recent (earliest date) at the top
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateA - dateB;
+    });
+  }, [selectedDate, selectedLocation, selectedCategory]);
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
@@ -47,9 +63,15 @@ export const EventsScreen: React.FC = () => {
     setShowLocationPicker(false);
   };
 
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setShowCategoryPicker(false);
+  };
+
   const clearFilter = () => {
     setSelectedDate(null);
     setSelectedLocation(null);
+    setSelectedCategory(null);
   };
 
   const clearDateFilter = () => {
@@ -58,6 +80,14 @@ export const EventsScreen: React.FC = () => {
 
   const clearLocationFilter = () => {
     setSelectedLocation(null);
+  };
+
+  const clearCategoryFilter = () => {
+    setSelectedCategory(null);
+  };
+
+  const getCategoryLabel = (category: string) => {
+    return category.charAt(0).toUpperCase() + category.slice(1);
   };
 
   const formatDisplayDate = (dateString: string) => {
@@ -87,11 +117,17 @@ export const EventsScreen: React.FC = () => {
           >
             <Text style={styles.locationButtonText}>📍 Filter by Location</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.categoryButton}
+            onPress={() => setShowCategoryPicker(true)}
+          >
+            <Text style={styles.categoryButtonText}>🏷️ Filter by Type</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* Selected Filters Display */}
-      {(selectedDate || selectedLocation) && (
+      {(selectedDate || selectedLocation || selectedCategory) && (
         <View style={styles.filterBanner}>
           <View style={styles.filterContainer}>
             {selectedDate && (
@@ -110,6 +146,16 @@ export const EventsScreen: React.FC = () => {
                   📍 {selectedLocation}
                 </Text>
                 <TouchableOpacity onPress={clearLocationFilter}>
+                  <Text style={styles.filterChipClose}>✕</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {selectedCategory && (
+              <View style={styles.filterChip}>
+                <Text style={styles.filterChipText}>
+                  🏷️ {getCategoryLabel(selectedCategory)}
+                </Text>
+                <TouchableOpacity onPress={clearCategoryFilter}>
                   <Text style={styles.filterChipClose}>✕</Text>
                 </TouchableOpacity>
               </View>
@@ -229,6 +275,46 @@ export const EventsScreen: React.FC = () => {
           </View>
         </View>
       </Modal>
+
+      {/* Category Picker Modal */}
+      <Modal
+        visible={showCategoryPicker}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowCategoryPicker(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Event Type</Text>
+              <TouchableOpacity onPress={() => setShowCategoryPicker(false)}>
+                <Text style={styles.modalClose}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.categoryList}>
+              {uniqueCategories.map((category) => (
+                <TouchableOpacity
+                  key={category}
+                  style={[
+                    styles.categoryItem,
+                    selectedCategory === category && styles.categoryItemSelected,
+                  ]}
+                  onPress={() => handleCategorySelect(category)}
+                >
+                  <Text
+                    style={[
+                      styles.categoryItemText,
+                      selectedCategory === category && styles.categoryItemTextSelected,
+                    ]}
+                  >
+                    {getCategoryLabel(category)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -280,6 +366,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   locationButtonText: {
+    color: colors.background,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  categoryButton: {
+    backgroundColor: colors.text,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 24,
+    alignItems: 'center',
+  },
+  categoryButtonText: {
     color: colors.background,
     fontSize: 15,
     fontWeight: '600',
@@ -403,6 +501,26 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   locationItemTextSelected: {
+    fontWeight: '600',
+  },
+  categoryList: {
+    maxHeight: 400,
+  },
+  categoryItem: {
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  categoryItemSelected: {
+    backgroundColor: colors.background,
+  },
+  categoryItemText: {
+    fontSize: 16,
+    color: colors.text,
+    fontWeight: '400',
+  },
+  categoryItemTextSelected: {
     fontWeight: '600',
   },
 });
