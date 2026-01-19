@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  Dimensions,
 } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { EventCard } from '../components/events/EventCard';
@@ -319,6 +320,9 @@ export const EventsScreen: React.FC = () => {
   );
 };
 
+const { width: screenWidth } = Dimensions.get('window');
+const isMobile = screenWidth < 768;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -326,8 +330,8 @@ const styles = StyleSheet.create({
   },
   toolbar: {
     backgroundColor: colors.background,
-    paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingHorizontal: isMobile ? 16 : 24,
+    paddingVertical: isMobile ? 16 : 32,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     maxWidth: 1280,
@@ -335,57 +339,57 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   toolbarTitle: {
-    fontSize: 48,
+    fontSize: isMobile ? 28 : 48,
     fontWeight: '400',
     color: colors.text,
-    marginBottom: 24,
+    marginBottom: isMobile ? 12 : 24,
     letterSpacing: -1,
   },
   filterButtonsContainer: {
     flexDirection: 'row',
-    gap: 12,
+    gap: isMobile ? 8 : 12,
     flexWrap: 'wrap',
   },
   calendarButton: {
     backgroundColor: colors.text,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 24,
+    paddingVertical: isMobile ? 8 : 12,
+    paddingHorizontal: isMobile ? 16 : 24,
+    borderRadius: isMobile ? 20 : 24,
     alignItems: 'center',
   },
   calendarButtonText: {
     color: colors.background,
-    fontSize: 15,
+    fontSize: isMobile ? 13 : 15,
     fontWeight: '600',
   },
   locationButton: {
     backgroundColor: colors.text,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 24,
+    paddingVertical: isMobile ? 8 : 12,
+    paddingHorizontal: isMobile ? 16 : 24,
+    borderRadius: isMobile ? 20 : 24,
     alignItems: 'center',
   },
   locationButtonText: {
     color: colors.background,
-    fontSize: 15,
+    fontSize: isMobile ? 13 : 15,
     fontWeight: '600',
   },
   categoryButton: {
     backgroundColor: colors.text,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 24,
+    paddingVertical: isMobile ? 8 : 12,
+    paddingHorizontal: isMobile ? 16 : 24,
+    borderRadius: isMobile ? 20 : 24,
     alignItems: 'center',
   },
   categoryButtonText: {
     color: colors.background,
-    fontSize: 15,
+    fontSize: isMobile ? 13 : 15,
     fontWeight: '600',
   },
   filterBanner: {
     backgroundColor: colors.surface,
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: isMobile ? 12 : 24,
+    paddingVertical: isMobile ? 10 : 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -394,35 +398,35 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     flexDirection: 'row',
-    gap: 8,
+    gap: isMobile ? 6 : 8,
     flexWrap: 'wrap',
     flex: 1,
-    marginRight: 12,
+    marginRight: isMobile ? 8 : 12,
   },
   filterChip: {
     backgroundColor: colors.background,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
+    paddingHorizontal: isMobile ? 10 : 12,
+    paddingVertical: isMobile ? 6 : 8,
+    borderRadius: isMobile ? 14 : 16,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: isMobile ? 6 : 8,
     borderWidth: 1,
     borderColor: colors.border,
   },
   filterChipText: {
     color: colors.text,
-    fontSize: 13,
+    fontSize: isMobile ? 12 : 13,
     fontWeight: '500',
   },
   filterChipClose: {
     color: colors.textSecondary,
-    fontSize: 14,
+    fontSize: isMobile ? 13 : 14,
     fontWeight: '600',
   },
   clearAllButton: {
     color: colors.text,
-    fontSize: 14,
+    fontSize: isMobile ? 13 : 14,
     fontWeight: '600',
   },
   scrollView: {

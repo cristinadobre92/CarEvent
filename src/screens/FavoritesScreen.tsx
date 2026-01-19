@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { EventCard } from '../components/events/EventCard';
 import { useFavoritesStore } from '../store/favoritesStore';
 import { colors } from '../theme/colors';
@@ -54,6 +54,9 @@ export const FavoritesScreen: React.FC = () => {
   );
 };
 
+const { width: screenWidth } = Dimensions.get('window');
+const isMobile = screenWidth < 768;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -61,8 +64,8 @@ const styles = StyleSheet.create({
   },
   toolbar: {
     backgroundColor: colors.background,
-    paddingHorizontal: 24,
-    paddingVertical: 32,
+    paddingHorizontal: isMobile ? 16 : 24,
+    paddingVertical: isMobile ? 16 : 32,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     maxWidth: 1280,
@@ -70,14 +73,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   toolbarTitle: {
-    fontSize: 48,
+    fontSize: isMobile ? 28 : 48,
     fontWeight: '400',
     color: colors.text,
-    marginBottom: 12,
+    marginBottom: isMobile ? 8 : 12,
     letterSpacing: -1,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: isMobile ? 14 : 16,
     color: colors.textSecondary,
   },
   scrollView: {
