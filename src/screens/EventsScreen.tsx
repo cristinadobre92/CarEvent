@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { EventCard } from '../components/events/EventCard';
-import { mockEvents } from '../utils/mockData';
+import { scrapedEvents } from '../utils/scrapedData';
 import { colors } from '../theme/colors';
 
 export const EventsScreen: React.FC = () => {
@@ -21,17 +21,17 @@ export const EventsScreen: React.FC = () => {
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
 
   const uniqueLocations = useMemo(() => {
-    const locations = Array.from(new Set(mockEvents.map(event => event.location)));
+    const locations = Array.from(new Set(scrapedEvents.map(event => event.location)));
     return locations.sort();
   }, []);
 
   const uniqueCategories = useMemo(() => {
-    const categories = Array.from(new Set(mockEvents.map(event => event.category)));
+    const categories = Array.from(new Set(scrapedEvents.map(event => event.category)));
     return categories.sort();
   }, []);
 
   const filteredEvents = useMemo(() => {
-    let filtered = mockEvents;
+    let filtered = scrapedEvents;
 
     if (selectedDate) {
       filtered = filtered.filter(event => event.date === selectedDate);
@@ -322,7 +322,7 @@ export const EventsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: 'transparent',
   },
   toolbar: {
     backgroundColor: colors.background,

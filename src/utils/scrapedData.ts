@@ -1,6 +1,6 @@
 import { Event } from '../types/event';
 
-export const mockEvents: Event[] = [
+export const scrapedEvents: Event[] = [
   {
     id: '1',
     title: 'Endurance Cup',
@@ -557,6 +557,51 @@ export const mockEvents: Event[] = [
     date: '2026-03-08',
     location: 'Polygon Hradec Králové, Czech Republic',
     url: 'https://www.polygonhradec.cz/kurzy/skola-smyku',
+    category: 'workshop',
+  },
+  {
+    id: '63',
+    title: 'CarsJet',
+    description: 'Racing and driving event at Automotodrom Brno. Time: 12:00-15:00.',
+    date: '2026-01-09',
+    location: 'Automotodrom Brno, Czech Republic',
+    url: 'https://www.autodrom.cz/administrace/kalendar2.php',
+    category: 'sports',
+  },
+  {
+    id: '64',
+    title: 'Safe Driving Course',
+    description: 'Kurz bezpečné jízdy - Full day safety instruction program teaching safe driving techniques.',
+    date: '2026-01-11',
+    location: 'Automotodrom Brno, Czech Republic',
+    url: 'https://www.autodrom.cz/administrace/kalendar2.php',
+    category: 'workshop',
+  },
+  {
+    id: '65',
+    title: 'Safe Driving Course',
+    description: 'Kurz bezpečné jízdy - Full day safety instruction program teaching safe driving techniques.',
+    date: '2026-01-20',
+    location: 'Automotodrom Brno, Czech Republic',
+    url: 'https://www.autodrom.cz/administrace/kalendar2.php',
+    category: 'workshop',
+  },
+  {
+    id: '66',
+    title: 'Sports Driving Course',
+    description: 'Kurz sportovní jízdy - Full day advanced driving technique instruction course for sports driving.',
+    date: '2026-01-25',
+    location: 'Automotodrom Brno, Czech Republic',
+    url: 'https://www.autodrom.cz/administrace/kalendar2.php',
+    category: 'workshop',
+  },
+  {
+    id: '67',
+    title: 'Safe Driving Course',
+    description: 'Kurz bezpečné jízdy - Full day safety instruction program teaching safe driving techniques.',
+    date: '2026-01-31',
+    location: 'Automotodrom Brno, Czech Republic',
+    url: 'https://www.autodrom.cz/administrace/kalendar2.php',
     category: 'workshop',
   },
 ];

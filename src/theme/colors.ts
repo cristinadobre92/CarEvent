@@ -1,9 +1,9 @@
-// Pipetail.io inspired color scheme - dark mode first
+// Pipetail.io inspired color scheme - dark mode first with transparency for background image
 export const colors = {
-  // Primary backgrounds - deep neutral-950 (near black)
-  background: '#0a0a0a',
-  surface: '#171717',
-  surfaceLight: '#262626',
+  // Primary backgrounds - transparent to show background image
+  background: 'rgba(10, 10, 10, 0.85)', // 85% opacity to let background image through
+  surface: 'rgba(23, 23, 23, 0.90)', // 90% opacity for cards
+  surfaceLight: 'rgba(38, 38, 38, 0.85)',
 
   // Text colors
   text: '#FFFFFF',

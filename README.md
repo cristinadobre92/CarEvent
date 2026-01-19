@@ -1,16 +1,42 @@
 # CarEvent App
 
-A cross-platform mobile application built with React Native and Expo for discovering and tracking motorsports events from premier racing venues across Europe, including Autodrom Most (Czech Republic) and Nürburgring (Germany).
+A cross-platform mobile application built with React Native and Expo for discovering and tracking motorsports events from premier racing venues across Europe, including Autodrom Most, Automotodrom Brno, and Polygon Hradec Králové (Czech Republic), and Nürburgring (Germany).
+
+🌐 **Live Demo**: [https://cristinadobre92.github.io/CarEvent](https://cristinadobre92.github.io/CarEvent)
+
+📦 **Repository**: [https://github.com/cristinadobre92/CarEvent](https://github.com/cristinadobre92/CarEvent)
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/cristinadobre92/CarEvent.git
+cd CarEvent/CarEventApp
+
+# Install dependencies
+npm install
+
+# Run on web
+npm run web
+
+# Or run on mobile
+npm start  # Then press 'i' for iOS or 'a' for Android
+
+# Deploy to GitHub Pages
+npm run deploy
+```
 
 ## Features
 
-- **Event Discovery**: Browse 57+ racing events from top European circuits
-- **Smart Filtering**: Filter events by date and location
-- **Favorites**: Save your favorite events for quick access
+- **Event Discovery**: Browse 67+ racing events from top European circuits
+- **Smart Filtering**: Filter events by date, location, and event type
+- **Favorites**: Save your favorite events for quick access with persistent storage
 - **Interactive Calendar**: Visual date picker for finding events
 - **Event Details**: Complete event information with direct links to official pages
-- **Cross-Platform**: Runs on iOS, Android, and Web
-- **Modern UI**: Clean, minimalist interface with smooth interactions
+- **Chronological Sorting**: Events automatically sorted by date (most recent first)
+- **Cross-Platform**: Runs on iOS, Android, and Web (deployed on GitHub Pages)
+- **Modern UI**: Clean, minimalist dark interface with elegant Porsche background
+- **Interactive Links**: Clickable event titles that open official event pages
 
 ## Prerequisites
 
@@ -41,8 +67,8 @@ Before installing the project, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd CarEventApp
+git clone https://github.com/cristinadobre92/CarEvent.git
+cd CarEvent/CarEventApp
 ```
 
 ### 2. Install Dependencies
@@ -109,29 +135,37 @@ npm run web
 
 ```
 CarEventApp/
-├── App.tsx                      # Root component
+├── App.tsx                      # Root component with background image
+├── assets/
+│   ├── car.png                  # Porsche 911 background image
+│   ├── icon.png                 # App icon
+│   ├── favicon.png              # Web favicon
+│   └── splash-icon.png          # Splash screen
 ├── src/
 │   ├── components/              # Reusable components
 │   │   ├── events/
-│   │   │   └── EventCard.tsx    # Event card component
+│   │   │   └── EventCard.tsx    # Event card with clickable titles
 │   │   └── navigation/
 │   │       └── Header.tsx       # Navigation header
 │   ├── navigation/
 │   │   └── TabNavigator.tsx     # Bottom tab navigation
 │   ├── screens/
-│   │   ├── EventsScreen.tsx     # Main events list with filters
-│   │   └── FavoritesScreen.tsx  # Saved favorites screen
+│   │   ├── EventsScreen.tsx     # Events list with date/location/type filters
+│   │   └── FavoritesScreen.tsx  # Saved favorites with persistence
 │   ├── store/
 │   │   └── favoritesStore.ts    # Zustand state management
 │   ├── theme/
-│   │   └── colors.ts            # Color palette
+│   │   └── colors.ts            # Color palette with transparency
 │   ├── types/
 │   │   └── event.ts             # TypeScript interfaces
 │   └── utils/
-│       └── mockData.ts          # Events data
-├── package.json                 # Dependencies and scripts
-├── tsconfig.json               # TypeScript configuration
-└── README.md                   # This file
+│       └── scrapedData.ts       # 67 events from 4 venues
+├── fix-paths.js                 # GitHub Pages path fixing script
+├── app.json                     # Expo configuration
+├── package.json                 # Dependencies and deployment scripts
+├── tsconfig.json                # TypeScript configuration
+├── .gitignore                   # Git ignore rules
+└── README.md                    # This file
 ```
 
 ## Available Scripts
@@ -142,6 +176,49 @@ CarEventApp/
 | iOS | `npm run ios` | Run on iOS simulator |
 | Android | `npm run android` | Run on Android emulator |
 | Web | `npm run web` | Run in web browser |
+| Deploy | `npm run deploy` | Build and deploy to GitHub Pages |
+
+## Deployment to GitHub Pages
+
+The app is automatically deployed to GitHub Pages and accessible at:
+**https://cristinadobre92.github.io/CarEvent**
+
+### How Deployment Works
+
+1. **Build Process**: Expo exports the web version to the `dist/` folder
+2. **Path Fixing**: A Node.js script (`fix-paths.js`) updates all paths to include `/CarEvent` prefix
+3. **Jekyll Bypass**: A `.nojekyll` file is added to prevent GitHub Pages from ignoring `_expo` folder
+4. **Deployment**: The `gh-pages` npm package deploys the `dist/` folder to the `gh-pages` branch
+
+### Deploy New Changes
+
+To deploy the latest version to GitHub Pages:
+
+```bash
+npm run deploy
+```
+
+This command will:
+- Export the web app with `expo export --platform web`
+- Fix asset paths for GitHub Pages subdirectory
+- Add `.nojekyll` file
+- Deploy to the `gh-pages` branch
+
+**Note**: After deployment, wait 1-3 minutes for GitHub Pages to rebuild the site.
+
+### GitHub Pages Configuration
+
+The repository is configured with:
+- **Source**: Deploy from `gh-pages` branch
+- **Folder**: `/` (root)
+- **Custom Domain**: None (using default `github.io` domain)
+- **Enforce HTTPS**: Enabled
+
+### Deployment Files
+
+- `fix-paths.js` - Script to fix absolute paths for GitHub Pages
+- `package.json` - Contains `homepage` and deployment scripts
+- `app.json` - Expo web configuration with base URL
 
 ## Technologies Used
 
@@ -173,10 +250,24 @@ Events are currently scraped from official racing venue websites:
 1. **Autodrom Most** (Czech Republic)
    - URL: https://www.autodrom-most.cz/kalendar-zavodu-c1423/
    - Events: 30 racing events for 2026
+   - Types: Endurance races, drift cups, historic races, motorcycle racing
 
 2. **Nürburgring** (Germany)
    - URL: https://nuerburgring.de/events?locale=en
    - Events: 27 motorsports and entertainment events for 2026-2027
+   - Types: 24h races, DTM, GT racing, concerts, family events
+
+3. **Polygon Hradec Králové** (Czech Republic)
+   - URL: https://www.polygonhradec.cz/kurzy/skola-smyku
+   - Events: 5 drift school courses for 2026
+   - Types: Driving workshops, skid school training sessions
+
+4. **Automotodrom Brno** (Czech Republic)
+   - URL: https://www.autodrom.cz/administrace/kalendar2.php
+   - Events: 5 driving courses and racing events for January 2026
+   - Types: Safe driving courses, sports driving courses, racing events
+
+**Total Events**: 67 events across 4 European venues
 
 ### Event Data Structure
 
@@ -193,10 +284,10 @@ Each event includes:
 
 ### Updating Event Data
 
-Event data is stored in `src/utils/mockData.ts`. To update events:
+Event data is stored in `src/utils/scrapedData.ts`. To update events:
 
 1. **Scrape New Events**: Use web scraping tools to extract updated event data
-2. **Update mockData.ts**: Add/modify events in the `mockEvents` array
+2. **Update scrapedData.ts**: Add/modify events in the `scrapedEvents` array
 3. **Maintain Data Structure**: Ensure all required fields are present
 4. **Update IDs**: Assign unique sequential IDs to new events
 5. **Verify URLs**: Test event URLs to ensure they're valid
@@ -240,7 +331,7 @@ npm install package-name@latest
 To add events from new racing venues:
 
 1. Scrape events from the venue's website
-2. Add events to `src/utils/mockData.ts`
+2. Add events to `src/utils/scrapedData.ts`
 3. Ensure location names are consistent
 4. Test the location filter functionality
 
@@ -308,11 +399,26 @@ Before deploying updates:
 
 The app supports the following event categories:
 
-- **sports**: Motorsports and racing events
+- **sports**: Motorsports and racing events (primary category)
 - **concert**: Music festivals and performances
 - **conference**: Tech and business conferences
-- **workshop**: Educational workshops
+- **workshop**: Educational driving workshops and training
 - **other**: Entertainment and miscellaneous events
+
+## UI Design
+
+### Background Image
+The app features an elegant Porsche 911 background image (`assets/car.png`) with:
+- **Positioning**: Centered and covers full screen
+- **Overlay**: 75% dark overlay (rgba(0, 0, 0, 0.75)) for readability
+- **Semi-transparent Cards**: Event cards have 85-90% opacity to subtly show the background
+- **Dark Theme**: Minimalist dark interface optimized for motorsports content
+
+### Color Scheme
+- **Background**: Dark with transparency
+- **Text**: High contrast white text
+- **Accents**: Purple (#4A2B7B) for interactive elements
+- **Cards**: Semi-transparent dark surfaces
 
 ## Future Enhancements
 
@@ -332,21 +438,38 @@ Potential features for future development:
 
 For issues, questions, or contributions:
 
-1. Check existing documentation
+1. Check existing documentation in this README
 2. Review troubleshooting section
-3. Open an issue in the repository
-4. Contact the development team
+3. Open an issue in the [GitHub repository](https://github.com/cristinadobre92/CarEvent/issues)
+4. Submit a pull request with improvements
+
+## Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
-[Add your license information here]
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Repository
+
+**GitHub**: [https://github.com/cristinadobre92/CarEvent](https://github.com/cristinadobre92/CarEvent)
+
+**Live Demo**: [https://cristinadobre92.github.io/CarEvent](https://cristinadobre92.github.io/CarEvent)
 
 ## Contributors
 
-[Add contributor information here]
+- **Cristina Dobre** - [@cristinadobre92](https://github.com/cristinadobre92) - Project Creator & Maintainer
 
 ---
 
-**Last Updated**: January 2026
+**Last Updated**: January 19, 2026
 **Version**: 1.0.0
-**Maintained By**: [Add maintainer information]
+**Maintained By**: Cristina Dobre
+**Built With**: React Native, Expo, TypeScript, and ❤️ for motorsports
