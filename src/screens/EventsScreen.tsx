@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   Modal,
   Dimensions,
-} from 'react-native';
-import { Calendar } from 'react-native-calendars';
-import { EventCard } from '../components/events/EventCard';
-import { scrapedEvents } from '../utils/scrapedData';
-import { colors } from '../theme/colors';
+} from "react-native";
+import { Calendar } from "react-native-calendars";
+import { EventCard } from "../components/events/EventCard";
+import { scrapedEvents } from "../utils/scrapedData";
+import { colors } from "../theme/colors";
 
 export const EventsScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -22,12 +22,16 @@ export const EventsScreen: React.FC = () => {
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
 
   const uniqueLocations = useMemo(() => {
-    const locations = Array.from(new Set(scrapedEvents.map(event => event.location)));
+    const locations = Array.from(
+      new Set(scrapedEvents.map((event) => event.location)),
+    );
     return locations.sort();
   }, []);
 
   const uniqueCategories = useMemo(() => {
-    const categories = Array.from(new Set(scrapedEvents.map(event => event.category)));
+    const categories = Array.from(
+      new Set(scrapedEvents.map((event) => event.category)),
+    );
     return categories.sort();
   }, []);
 
@@ -35,15 +39,19 @@ export const EventsScreen: React.FC = () => {
     let filtered = scrapedEvents;
 
     if (selectedDate) {
-      filtered = filtered.filter(event => event.date === selectedDate);
+      filtered = filtered.filter((event) => event.date === selectedDate);
     }
 
     if (selectedLocation) {
-      filtered = filtered.filter(event => event.location === selectedLocation);
+      filtered = filtered.filter(
+        (event) => event.location === selectedLocation,
+      );
     }
 
     if (selectedCategory) {
-      filtered = filtered.filter(event => event.category === selectedCategory);
+      filtered = filtered.filter(
+        (event) => event.category === selectedCategory,
+      );
     }
 
     // Sort by date: most recent (earliest date) at the top
@@ -93,10 +101,10 @@ export const EventsScreen: React.FC = () => {
 
   const formatDisplayDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -143,9 +151,7 @@ export const EventsScreen: React.FC = () => {
             )}
             {selectedLocation && (
               <View style={styles.filterChip}>
-                <Text style={styles.filterChipText}>
-                  📍 {selectedLocation}
-                </Text>
+                <Text style={styles.filterChipText}>📍 {selectedLocation}</Text>
                 <TouchableOpacity onPress={clearLocationFilter}>
                   <Text style={styles.filterChipClose}>✕</Text>
                 </TouchableOpacity>
@@ -171,7 +177,7 @@ export const EventsScreen: React.FC = () => {
       {/* Events List */}
       <ScrollView style={styles.scrollView}>
         {filteredEvents.length > 0 ? (
-          filteredEvents.map(event => (
+          filteredEvents.map((event) => (
             <EventCard key={event.id} event={event} />
           ))
         ) : (
@@ -179,7 +185,10 @@ export const EventsScreen: React.FC = () => {
             <Text style={styles.emptyStateText}>
               No events found with the selected filters
             </Text>
-            <TouchableOpacity onPress={clearFilter} style={styles.showAllButton}>
+            <TouchableOpacity
+              onPress={clearFilter}
+              style={styles.showAllButton}
+            >
               <Text style={styles.showAllButtonText}>Show All Events</Text>
             </TouchableOpacity>
           </View>
@@ -225,9 +234,9 @@ export const EventsScreen: React.FC = () => {
                 arrowColor: colors.text,
                 monthTextColor: colors.text,
                 indicatorColor: colors.text,
-                textDayFontWeight: '400',
-                textMonthFontWeight: '600',
-                textDayHeaderFontWeight: '500',
+                textDayFontWeight: "400",
+                textMonthFontWeight: "600",
+                textDayHeaderFontWeight: "500",
                 textDayFontSize: 15,
                 textMonthFontSize: 18,
                 textDayHeaderFontSize: 13,
@@ -258,14 +267,16 @@ export const EventsScreen: React.FC = () => {
                   key={location}
                   style={[
                     styles.locationItem,
-                    selectedLocation === location && styles.locationItemSelected,
+                    selectedLocation === location &&
+                      styles.locationItemSelected,
                   ]}
                   onPress={() => handleLocationSelect(location)}
                 >
                   <Text
                     style={[
                       styles.locationItemText,
-                      selectedLocation === location && styles.locationItemTextSelected,
+                      selectedLocation === location &&
+                        styles.locationItemTextSelected,
                     ]}
                   >
                     {location}
@@ -298,14 +309,16 @@ export const EventsScreen: React.FC = () => {
                   key={category}
                   style={[
                     styles.categoryItem,
-                    selectedCategory === category && styles.categoryItemSelected,
+                    selectedCategory === category &&
+                      styles.categoryItemSelected,
                   ]}
                   onPress={() => handleCategorySelect(category)}
                 >
                   <Text
                     style={[
                       styles.categoryItemText,
-                      selectedCategory === category && styles.categoryItemTextSelected,
+                      selectedCategory === category &&
+                        styles.categoryItemTextSelected,
                     ]}
                   >
                     {getCategoryLabel(category)}
@@ -320,129 +333,129 @@ export const EventsScreen: React.FC = () => {
   );
 };
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get("window");
 const isMobile = screenWidth < 768;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   toolbar: {
     backgroundColor: colors.background,
-    paddingHorizontal: isMobile ? 16 : 24,
-    paddingVertical: isMobile ? 16 : 32,
+    paddingHorizontal: isMobile ? 8 : 24,
+    paddingVertical: isMobile ? 8 : 32,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     maxWidth: 1280,
-    width: '100%',
-    alignSelf: 'center',
+    width: "100%",
+    alignSelf: "center",
   },
   toolbarTitle: {
-    fontSize: isMobile ? 28 : 48,
-    fontWeight: '400',
+    fontSize: isMobile ? 12 : 48,
+    fontWeight: "400",
     color: colors.text,
-    marginBottom: isMobile ? 12 : 24,
+    marginBottom: isMobile ? 4 : 24,
     letterSpacing: -1,
   },
   filterButtonsContainer: {
-    flexDirection: 'row',
-    gap: isMobile ? 8 : 12,
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    gap: isMobile ? 4 : 12,
+    flexWrap: "wrap",
   },
   calendarButton: {
     backgroundColor: colors.text,
-    paddingVertical: isMobile ? 8 : 12,
+    paddingVertical: isMobile ? 4 : 12,
     paddingHorizontal: isMobile ? 16 : 24,
     borderRadius: isMobile ? 20 : 24,
-    alignItems: 'center',
+    alignItems: "center",
   },
   calendarButtonText: {
     color: colors.background,
     fontSize: isMobile ? 13 : 15,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   locationButton: {
     backgroundColor: colors.text,
-    paddingVertical: isMobile ? 8 : 12,
+    paddingVertical: isMobile ? 4 : 12,
     paddingHorizontal: isMobile ? 16 : 24,
     borderRadius: isMobile ? 20 : 24,
-    alignItems: 'center',
+    alignItems: "center",
   },
   locationButtonText: {
     color: colors.background,
     fontSize: isMobile ? 13 : 15,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   categoryButton: {
     backgroundColor: colors.text,
-    paddingVertical: isMobile ? 8 : 12,
+    paddingVertical: isMobile ? 4 : 12,
     paddingHorizontal: isMobile ? 16 : 24,
     borderRadius: isMobile ? 20 : 24,
-    alignItems: 'center',
+    alignItems: "center",
   },
   categoryButtonText: {
     color: colors.background,
     fontSize: isMobile ? 13 : 15,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   filterBanner: {
     backgroundColor: colors.surface,
     paddingHorizontal: isMobile ? 12 : 24,
-    paddingVertical: isMobile ? 10 : 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    paddingVertical: isMobile ? 4 : 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
   filterContainer: {
-    flexDirection: 'row',
-    gap: isMobile ? 6 : 8,
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    gap: isMobile ? 4 : 8,
+    flexWrap: "wrap",
     flex: 1,
     marginRight: isMobile ? 8 : 12,
   },
   filterChip: {
     backgroundColor: colors.background,
     paddingHorizontal: isMobile ? 10 : 12,
-    paddingVertical: isMobile ? 6 : 8,
+    paddingVertical: isMobile ? 4 : 8,
     borderRadius: isMobile ? 14 : 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: isMobile ? 6 : 8,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: isMobile ? 4 : 8,
     borderWidth: 1,
     borderColor: colors.border,
   },
   filterChipText: {
     color: colors.text,
     fontSize: isMobile ? 12 : 13,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   filterChipClose: {
     color: colors.textSecondary,
     fontSize: isMobile ? 13 : 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   clearAllButton: {
     color: colors.text,
     fontSize: isMobile ? 13 : 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   scrollView: {
     flex: 1,
   },
   emptyState: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 40,
     marginTop: 100,
   },
   emptyStateText: {
     fontSize: 18,
     color: colors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
   showAllButton: {
@@ -454,38 +467,38 @@ const styles = StyleSheet.create({
   showAllButtonText: {
     color: colors.background,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
     backgroundColor: colors.surface,
     borderRadius: 24,
     padding: 24,
-    width: '90%',
+    width: "90%",
     maxWidth: 500,
     borderWidth: 1,
     borderColor: colors.border,
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 20,
   },
   modalTitle: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: "600",
     color: colors.text,
   },
   modalClose: {
     fontSize: 28,
     color: colors.textSecondary,
-    fontWeight: '300',
+    fontWeight: "300",
   },
   locationList: {
     maxHeight: 400,
@@ -502,10 +515,10 @@ const styles = StyleSheet.create({
   locationItemText: {
     fontSize: 16,
     color: colors.text,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   locationItemTextSelected: {
-    fontWeight: '600',
+    fontWeight: "600",
   },
   categoryList: {
     maxHeight: 400,
@@ -522,9 +535,9 @@ const styles = StyleSheet.create({
   categoryItemText: {
     fontSize: 16,
     color: colors.text,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   categoryItemTextSelected: {
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

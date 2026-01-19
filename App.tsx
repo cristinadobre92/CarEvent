@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { ImageBackground, StyleSheet, View, Platform } from "react-native";
 import { TabNavigator } from "./src/navigation/TabNavigator";
 
 export default function App() {
@@ -13,10 +13,13 @@ export default function App() {
         style={styles.backgroundImage}
         resizeMode="cover"
       >
-
         {/* Content layer above overlay */}
         <View style={styles.content}>
-          <NavigationContainer>
+          <NavigationContainer
+            documentTitle={{
+              formatter: () => "CarEvent",
+            }}
+          >
             <TabNavigator />
             <StatusBar style="light" />
           </NavigationContainer>

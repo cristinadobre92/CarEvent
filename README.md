@@ -50,16 +50,19 @@ Before installing the project, ensure you have the following installed:
 ### Platform-Specific Requirements
 
 #### iOS Development
+
 - macOS with Xcode 14.0 or higher
 - iOS Simulator or physical iOS device
 - CocoaPods: `sudo gem install cocoapods`
 
 #### Android Development
+
 - Android Studio with Android SDK
 - Android Emulator or physical Android device
 - Java Development Kit (JDK) 11 or higher
 
 #### Web Development
+
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 
 ## Installation
@@ -78,6 +81,7 @@ npm install
 ```
 
 This will install all required dependencies including:
+
 - React Native and Expo framework
 - Navigation libraries
 - State management (Zustand)
@@ -107,16 +111,19 @@ This will open the Expo Developer Tools in your browser with a QR code.
 ### Platform-Specific Commands
 
 #### iOS (macOS only)
+
 ```bash
 npm run ios
 ```
 
 #### Android
+
 ```bash
 npm run android
 ```
 
 #### Web Browser
+
 ```bash
 npm run web
 ```
@@ -139,7 +146,7 @@ CarEventApp/
 ├── assets/
 │   ├── car.png                  # Porsche 911 background image
 │   ├── icon.png                 # App icon
-│   ├── favicon.png              # Web favicon
+│   ├── favicon.ico              # Web favicon
 │   └── splash-icon.png          # Splash screen
 ├── src/
 │   ├── components/              # Reusable components
@@ -170,13 +177,13 @@ CarEventApp/
 
 ## Available Scripts
 
-| Script | Command | Description |
-|--------|---------|-------------|
-| Start | `npm start` | Start Expo development server |
-| iOS | `npm run ios` | Run on iOS simulator |
-| Android | `npm run android` | Run on Android emulator |
-| Web | `npm run web` | Run in web browser |
-| Deploy | `npm run deploy` | Build and deploy to GitHub Pages |
+| Script  | Command           | Description                      |
+| ------- | ----------------- | -------------------------------- |
+| Start   | `npm start`       | Start Expo development server    |
+| iOS     | `npm run ios`     | Run on iOS simulator             |
+| Android | `npm run android` | Run on Android emulator          |
+| Web     | `npm run web`     | Run in web browser               |
+| Deploy  | `npm run deploy`  | Build and deploy to GitHub Pages |
 
 ## Deployment to GitHub Pages
 
@@ -199,6 +206,7 @@ npm run deploy
 ```
 
 This command will:
+
 - Export the web app with `expo export --platform web`
 - Fix asset paths for GitHub Pages subdirectory
 - Add `.nojekyll` file
@@ -209,6 +217,7 @@ This command will:
 ### GitHub Pages Configuration
 
 The repository is configured with:
+
 - **Source**: Deploy from `gh-pages` branch
 - **Folder**: `/` (root)
 - **Custom Domain**: None (using default `github.io` domain)
@@ -223,23 +232,28 @@ The repository is configured with:
 ## Technologies Used
 
 ### Core Framework
+
 - **React Native**: v0.81.5 - Cross-platform mobile framework
 - **Expo**: v54.0.25 - Development platform and toolchain
 - **TypeScript**: v5.9.2 - Type-safe JavaScript
 
 ### Navigation
+
 - **React Navigation**: v7.1.22 - Routing and navigation
 - **Bottom Tabs Navigator**: v7.8.8 - Tab-based navigation
 
 ### State Management
+
 - **Zustand**: v5.0.9 - Lightweight state management
 - **AsyncStorage**: v2.2.0 - Persistent storage for favorites
 
 ### UI Components
+
 - **React Native Calendars**: v1.1313.0 - Calendar components
 - **Safe Area Context**: v5.6.0 - Handle device safe areas
 
 ### Development
+
 - **React**: v19.1.0 - UI library
 - **React Native Web**: v0.21.0 - Web support
 
@@ -272,6 +286,7 @@ Events are currently scraped from official racing venue websites:
 ### Event Data Structure
 
 Each event includes:
+
 - **id**: Unique identifier
 - **title**: Event name
 - **description**: Event details
@@ -338,18 +353,21 @@ To add events from new racing venues:
 ### Code Maintenance Best Practices
 
 #### Regular Tasks
+
 - **Weekly**: Check for dependency updates
 - **Monthly**: Review and update event data
 - **Quarterly**: Remove past events from the database
 - **As Needed**: Add new venues and events
 
 #### Code Quality
+
 - Run TypeScript type checking: `npx tsc --noEmit`
 - Follow existing code patterns and naming conventions
 - Test on multiple platforms (iOS, Android, Web)
 - Verify all event URLs are working
 
 #### Performance Optimization
+
 - Monitor app bundle size: `npx expo export --dump-sourcemap`
 - Optimize images if added in future updates
 - Profile rendering performance using React DevTools
@@ -358,24 +376,28 @@ To add events from new racing venues:
 ### Troubleshooting
 
 #### Metro Bundler Issues
+
 ```bash
 # Clear cache and restart
 npx expo start -c
 ```
 
 #### iOS Build Issues
+
 ```bash
 cd ios && pod install && cd ..
 npm run ios
 ```
 
 #### Android Build Issues
+
 ```bash
 cd android && ./gradlew clean && cd ..
 npm run android
 ```
 
 #### Dependency Issues
+
 ```bash
 # Remove and reinstall dependencies
 rm -rf node_modules package-lock.json
@@ -408,13 +430,16 @@ The app supports the following event categories:
 ## UI Design
 
 ### Background Image
+
 The app features an elegant Porsche 911 background image (`assets/car.png`) with:
+
 - **Positioning**: Centered and covers full screen
 - **Overlay**: 75% dark overlay (rgba(0, 0, 0, 0.75)) for readability
 - **Semi-transparent Cards**: Event cards have 85-90% opacity to subtly show the background
 - **Dark Theme**: Minimalist dark interface optimized for motorsports content
 
 ### Color Scheme
+
 - **Background**: Dark with transparency
 - **Text**: High contrast white text
 - **Accents**: Purple (#4A2B7B) for interactive elements

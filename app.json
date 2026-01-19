@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "CarEventApp",
+    "name": "CarEvent",
     "slug": "CarEventApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -24,7 +24,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./assets/icon.png",
       "bundler": "metro",
       "baseUrl": "/CarEvent"
     }
