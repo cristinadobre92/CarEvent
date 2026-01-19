@@ -1,0 +1,102 @@
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { EventCard } from '../components/events/EventCard';
+import { useFavoritesStore } from '../store/favoritesStore';
+import { colors } from '../theme/colors';
+
+export const FavoritesScreen: React.FC = () => {
+  const { favorites, loadFavorites, isLoading } = useFavoritesStore();
+
+  useEffect(() => {
+    loadFavorites();
+  }, [loadFavorites]);
+
+  return (
+    <View style={styles.container}>
+      {/* Toolbar */}
+      <View style={styles.toolbar}>
+        <Text style={styles.toolbarTitle}>My Favorites</Text>
+        <Text style={styles.subtitle}>
+          {favorites.length} {favorites.length === 1 ? 'event' : 'events'} saved
+        </Text>
+      </View>
+
+      {/* Favorites List */}
+      <ScrollView style={styles.scrollView}>
+        {isLoading ? (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyStateText}>Loading favorites...</Text>
+          </View>
+        ) : favorites.length > 0 ? (
+          favorites.map(event => (
+            <EventCard key={event.id} event={event} />
+          ))
+        ) : (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyIcon}>❤️</Text>
+            <Text style={styles.emptyStateText}>No favorite events yet</Text>
+            <Text style={styles.emptyStateSubtext}>
+              Tap the heart icon on any event to save it here
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  toolbar: {
+    backgroundColor: colors.background,
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  toolbarTitle: {
+    fontSize: 48,
+    fontWeight: '400',
+    color: colors.text,
+    marginBottom: 12,
+    letterSpacing: -1,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: colors.textSecondary,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 40,
+    marginTop: 100,
+  },
+  emptyIcon: {
+    fontSize: 80,
+    marginBottom: 24,
+    opacity: 0.5,
+  },
+  emptyStateText: {
+    fontSize: 24,
+    fontWeight: '400',
+    color: colors.text,
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  emptyStateSubtext: {
+    fontSize: 16,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});
