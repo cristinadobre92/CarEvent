@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  Image,
 } from "react-native";
 import { colors } from "../../theme/colors";
 
@@ -19,6 +20,10 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange }) => {
       <View style={styles.content}>
         {/* Logo/Brand */}
         <View style={styles.logoContainer}>
+          <Image
+            source={require("../../../assets/icon.png")}
+            style={styles.logoImage}
+          />
           <Text style={styles.logo}>CarEvent</Text>
         </View>
 
@@ -78,8 +83,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     maxWidth: 1280,
     width: "100%",
     alignSelf: "center",
@@ -87,6 +92,12 @@ const styles = StyleSheet.create({
   logoContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  logoImage: {
+    width: 60,
+    height: 40,
+    marginRight: 8,
+    marginLeft: -24,
   },
   logo: {
     fontSize: 20,

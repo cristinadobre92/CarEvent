@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   Dimensions,
+  Animated,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { EventCard } from "../components/events/EventCard";
@@ -17,9 +18,14 @@ export const EventsScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showPastEvents, setShowPastEvents] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showLocationPicker, setShowLocationPicker] = useState(false);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
+  const [filtersVisible, setFiltersVisible] = useState(false);
+
+  const filterHeight = useRef(new Animated.Value(0)).current;
+  const filterOpacity = useRef(new Animated.Value(0)).current;
 
   const uniqueLocations = useMemo(() => {
     const locations = Array.from(
@@ -37,6 +43,17 @@ export const EventsScreen: React.FC = () => {
 
   const filteredEvents = useMemo(() => {
     let filtered = scrapedEvents;
+
+    // Filter out past events by default (events before today)
+    if (!showPastEvents) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Start of today
+      filtered = filtered.filter((event) => {
+        const eventDate = new Date(event.date);
+        eventDate.setHours(0, 0, 0, 0);
+        return eventDate >= today;
+      });
+    }
 
     if (selectedDate) {
       filtered = filtered.filter((event) => event.date === selectedDate);
@@ -60,7 +77,7 @@ export const EventsScreen: React.FC = () => {
       const dateB = new Date(b.date).getTime();
       return dateA - dateB;
     });
-  }, [selectedDate, selectedLocation, selectedCategory]);
+  }, [selectedDate, selectedLocation, selectedCategory, showPastEvents]);
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
@@ -81,6 +98,7 @@ export const EventsScreen: React.FC = () => {
     setSelectedDate(null);
     setSelectedLocation(null);
     setSelectedCategory(null);
+    setShowPastEvents(false);
   };
 
   const clearDateFilter = () => {
@@ -93,6 +111,29 @@ export const EventsScreen: React.FC = () => {
 
   const clearCategoryFilter = () => {
     setSelectedCategory(null);
+  };
+
+  const clearPastEventsFilter = () => {
+    setShowPastEvents(false);
+  };
+
+  const toggleFilters = () => {
+    const toValue = filtersVisible ? 0 : 1;
+
+    Animated.parallel([
+      Animated.timing(filterHeight, {
+        toValue,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+      Animated.timing(filterOpacity, {
+        toValue,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+    ]).start();
+
+    setFiltersVisible(!filtersVisible);
   };
 
   const getCategoryLabel = (category: string) => {
@@ -112,8 +153,33 @@ export const EventsScreen: React.FC = () => {
     <View style={styles.container}>
       {/* Toolbar */}
       <View style={styles.toolbar}>
-        <Text style={styles.toolbarTitle}>Events</Text>
-        <View style={styles.filterButtonsContainer}>
+        <View style={styles.toolbarHeader}>
+          <Text style={styles.toolbarTitle}>Events</Text>
+          <TouchableOpacity
+            style={styles.toggleFiltersButton}
+            onPress={toggleFilters}
+          >
+            <Text style={styles.toggleFiltersButtonText}>
+              {filtersVisible ? "Hide Filters ▲" : "Show Filters ▼"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Animated.View
+          style={[
+            styles.filterButtonsContainer,
+            {
+              maxHeight: filterHeight.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 500],
+              }),
+              opacity: filterOpacity,
+              marginTop: filterHeight.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, isMobile ? 4 : 24],
+              }),
+            },
+          ]}
+        >
           <TouchableOpacity
             style={styles.calendarButton}
             onPress={() => setShowCalendar(true)}
@@ -132,11 +198,30 @@ export const EventsScreen: React.FC = () => {
           >
             <Text style={styles.categoryButtonText}>🏷️ Filter by Type</Text>
           </TouchableOpacity>
-        </View>
+          <TouchableOpacity
+            style={[
+              styles.pastEventsButton,
+              showPastEvents && styles.pastEventsButtonActive,
+            ]}
+            onPress={() => setShowPastEvents(!showPastEvents)}
+          >
+            <Text
+              style={[
+                styles.pastEventsButtonText,
+                showPastEvents && styles.pastEventsButtonTextActive,
+              ]}
+            >
+              🕒 {showPastEvents ? "Hide Past Events" : "Show Past Events"}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
       </View>
 
       {/* Selected Filters Display */}
-      {(selectedDate || selectedLocation || selectedCategory) && (
+      {(selectedDate ||
+        selectedLocation ||
+        selectedCategory ||
+        showPastEvents) && (
         <View style={styles.filterBanner}>
           <View style={styles.filterContainer}>
             {selectedDate && (
@@ -163,6 +248,14 @@ export const EventsScreen: React.FC = () => {
                   🏷️ {getCategoryLabel(selectedCategory)}
                 </Text>
                 <TouchableOpacity onPress={clearCategoryFilter}>
+                  <Text style={styles.filterChipClose}>✕</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {showPastEvents && (
+              <View style={styles.filterChip}>
+                <Text style={styles.filterChipText}>🕒 Past Events</Text>
+                <TouchableOpacity onPress={clearPastEventsFilter}>
                   <Text style={styles.filterChipClose}>✕</Text>
                 </TouchableOpacity>
               </View>
@@ -343,7 +436,7 @@ const styles = StyleSheet.create({
   },
   toolbar: {
     backgroundColor: colors.background,
-    paddingHorizontal: isMobile ? 8 : 24,
+    paddingHorizontal: 0,
     paddingVertical: isMobile ? 8 : 32,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
@@ -351,17 +444,35 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: "center",
   },
+  toolbarHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   toolbarTitle: {
     fontSize: isMobile ? 12 : 48,
     fontWeight: "400",
     color: colors.text,
-    marginBottom: isMobile ? 4 : 24,
     letterSpacing: -1,
+  },
+  toggleFiltersButton: {
+    backgroundColor: colors.surface,
+    paddingVertical: isMobile ? 6 : 10,
+    paddingHorizontal: isMobile ? 12 : 18,
+    borderRadius: isMobile ? 16 : 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  toggleFiltersButtonText: {
+    color: colors.text,
+    fontSize: isMobile ? 12 : 14,
+    fontWeight: "600",
   },
   filterButtonsContainer: {
     flexDirection: "row",
     gap: isMobile ? 4 : 12,
     flexWrap: "wrap",
+    overflow: "hidden",
   },
   calendarButton: {
     backgroundColor: colors.text,
@@ -398,6 +509,27 @@ const styles = StyleSheet.create({
     color: colors.background,
     fontSize: isMobile ? 13 : 15,
     fontWeight: "600",
+  },
+  pastEventsButton: {
+    backgroundColor: colors.surface,
+    paddingVertical: isMobile ? 4 : 12,
+    paddingHorizontal: isMobile ? 16 : 24,
+    borderRadius: isMobile ? 20 : 24,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  pastEventsButtonActive: {
+    backgroundColor: colors.text,
+    borderColor: colors.text,
+  },
+  pastEventsButtonText: {
+    color: colors.text,
+    fontSize: isMobile ? 13 : 15,
+    fontWeight: "600",
+  },
+  pastEventsButtonTextActive: {
+    color: colors.background,
   },
   filterBanner: {
     backgroundColor: colors.surface,
